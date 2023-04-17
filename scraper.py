@@ -26,7 +26,7 @@ mainDishCategories = ['Starch and Potatoes', 'Entrees', 'Desserts', 'Sides', 'Ha
 mainDishes = [x for x in req if x['Menu_Category_Name'] in mainDishCategories]
 
 # local database
-foods = open("foods.txt", 'r+')
+foods = open("foods.txt", 'r+', encoding = "ISO-8859-1")
 foodSet = set([x.strip() for x in foods.readlines()])
 
 for each in mainDishes:
@@ -46,11 +46,13 @@ for each in mainDishes:
 
     # login
     if driver.current_url == r'https://www.myfitnesspal.com/account/login?callbackUrl=https%3A%2F%2Fwww.myfitnesspal.com%2Ffood%2Fsubmit':
+        # wait 2 seconds 
+        time.sleep(2)
         driver.find_element('xpath', '//*[@id="email"]').send_keys('mjmoorman03@gmail.com')
         time.sleep(1)
         driver.find_element('xpath', '//*[@id="password"]').send_keys('5hUAwj@zEr.au.5')
         time.sleep(1)
-        driver.find_element('xpath', '//*[@id="__next"]/div/main/div/div/form/div/div[3]/button[1]').click()
+        driver.find_element('xpath', '//*[@id="__next"]/div/main/div/div/form/div/div[2]/button[1]/span[1]').click()
 
     # name of food and stuff
     brandinput = driver.find_element("xpath", '//*[@id="food_brand"]')
