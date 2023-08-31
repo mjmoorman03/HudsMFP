@@ -2,22 +2,27 @@ import time
 import requests
 from requests.auth import HTTPBasicAuth
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from datetime import date
+from webdriver_manager.chrome import ChromeDriverManager
 
 currentDate = date.today().strftime('%y-%m-%d')
+with open('apikey.txt', 'r') as file:
+    apikey = file.readline()
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument(' — headless')
 chrome_options.add_argument(' — no-sandbox')
 chrome_options.add_argument(' — disable-dev-shm-usage')
 chrome_options.add_experimental_option("excludeSwitches", ["disable-popup-blocking"])
-driver=webdriver.Chrome(r'C:/Users/Michael Moorman/Downloads/chromedriver_win32/chromedriver.exe' , options=chrome_options)
+driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 driver.implicitly_wait(3)
 driver.maximize_window()
 
-auth = HTTPBasicAuth('x-api-key', 'd56eb9Bo3zsdsM2TkMLnLhnB8E0ohb0r')
+
+auth = HTTPBasicAuth('x-api-key', apikey)
 # location id of 14 is kirkland and eliot house
 req = requests.get("https://go.apis.huit.harvard.edu/ats/dining/v3/recipes?locationId=14", auth=auth).json()
 
@@ -46,13 +51,9 @@ for each in mainDishes:
 
     # login
     if driver.current_url == r'https://www.myfitnesspal.com/account/login?callbackUrl=https%3A%2F%2Fwww.myfitnesspal.com%2Ffood%2Fsubmit':
-        # wait 2 seconds 
-        time.sleep(2)
-        driver.find_element('xpath', '//*[@id="email"]').send_keys('mjmoorman03@gmail.com')
-        time.sleep(1)
-        driver.find_element('xpath', '//*[@id="password"]').send_keys('5hUAwj@zEr.au.5')
-        time.sleep(1)
-        driver.find_element('xpath', '//*[@id="__next"]/div/main/div/div/form/div/div[2]/button[1]/span[1]').click()
+        # wait for user (me) to authenticate
+        while (input("done?\n") != "Y"):
+            time.sleep(3)
 
     # name of food and stuff
     brandinput = driver.find_element("xpath", '//*[@id="food_brand"]')
