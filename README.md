@@ -16,3 +16,4 @@ There are currently 450+ meals that this algorithm has uploaded into MyFitnessPa
 
 ## Example Entry
 
+![App Screenshot](https://github.com/mjmoorman03/HudsMFP/tree/main/example1.png)
